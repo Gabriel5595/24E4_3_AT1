@@ -1,12 +1,9 @@
-// screens/TransacaoListScreen.js
-
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, Button } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Certifique-se de instalar esta dependência
+import { Picker } from '@react-native-picker/picker';
 import TransacaoItemList from '../../components/TransacaoItemList';
 
 export default function TransacaoListScreen({ navigation }) {
-    // Dados Originais com 10 transações
     const dadosOriginais = [
         {
             id: '1',
@@ -110,12 +107,10 @@ export default function TransacaoListScreen({ navigation }) {
         }
     ];
 
-    // Estados para Ordenação e Filtragem
     const [sortOption, setSortOption] = useState('');
     const [filterOption, setFilterOption] = useState('');
     const [dados, setDados] = useState(dadosOriginais);
 
-    // Função para Ordenar Dados
     const ordenarDados = (dadosParaOrdenar, criterio) => {
         let dadosOrdenados = [...dadosParaOrdenar];
         if (criterio === 'descricao') {
@@ -140,7 +135,6 @@ export default function TransacaoListScreen({ navigation }) {
         return dadosOrdenados;
     };
 
-    // Função para Filtrar Dados
     const filtrarDados = (dadosParaFiltrar, criterio) => {
         if (criterio === 'Receita') {
             return dadosParaFiltrar.filter(item => item.tipo === 'Receita');
@@ -150,14 +144,11 @@ export default function TransacaoListScreen({ navigation }) {
         return dadosParaFiltrar;
     };
 
-    // useEffect para aplicar Ordenação e Filtragem sempre que sortOption ou filterOption mudar
     useEffect(() => {
         let dadosProcessados = [...dadosOriginais];
 
-        // Aplicar Filtragem
         dadosProcessados = filtrarDados(dadosProcessados, filterOption);
 
-        // Aplicar Ordenação
         if (sortOption !== '') {
             dadosProcessados = ordenarDados(dadosProcessados, sortOption);
         }
@@ -167,7 +158,6 @@ export default function TransacaoListScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            {/* Seção de Ordenação */}
             <View style={styles.controlSection}>
                 <Text style={styles.controlLabel}>Ordenar por:</Text>
                 <Picker
@@ -186,7 +176,6 @@ export default function TransacaoListScreen({ navigation }) {
                 </Picker>
             </View>
 
-            {/* Seção de Filtragem */}
             <View style={styles.controlSection}>
                 <Text style={styles.controlLabel}>Filtrar por Tipo:</Text>
                 <Picker
@@ -200,7 +189,6 @@ export default function TransacaoListScreen({ navigation }) {
                 </Picker>
             </View>
 
-            {/* Botão para Resetar Filtros e Ordenação */}
             <View style={styles.resetButton}>
                 <Button
                     title="Resetar Filtros e Ordenação"
@@ -211,7 +199,6 @@ export default function TransacaoListScreen({ navigation }) {
                 />
             </View>
 
-            {/* Lista de Transações */}
             <FlatList
                 data={dados}
                 keyExtractor={item => item.id}

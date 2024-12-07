@@ -1,16 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 
-export default function TransacaoItemList({ transacao }) {
-    const {
-        descricao,
-        valor,
-        data,
-        hora,
-        categoria,
-        tipo,
-        moeda
-    } = transacao;
+export default function ExchangeList({ exchange }) {
+    const { simbolo, nomeFormatado, tipoMoeda, cotacaoCompra, cotacaoVenda, dataHoraCotacao } = exchange;
 
     const window = useWindowDimensions();
     const isLandscape = window.width > window.height;
@@ -18,16 +10,16 @@ export default function TransacaoItemList({ transacao }) {
     return (
         <View style={styles.container}>
             <View style={styles.row}>
-                <Text style={styles.descricao}>{descricao}</Text>
-                <Text style={styles.valor}>{`${valor} ${moeda}`}</Text>
+                <Text style={styles.simbolo}>{simbolo}</Text>
+                <Text style={styles.nome}>{nomeFormatado}</Text>
             </View>
             <View style={styles.row}>
-                <Text style={styles.data}>{`Data: ${data}`}</Text>
+                <Text style={styles.cotacao}>{`Compra: ${cotacaoCompra}`}</Text>
                 {isLandscape && (
                     <View>
-                        <Text style={styles.hora}>{`Hora: ${hora}`}</Text>
-                        <Text style={styles.categoria}>{`Categoria: ${categoria}`}</Text>
-                        <Text style={styles.tipo}>{`Tipo: ${tipo}`}</Text>
+                        <Text style={styles.cotacao}>{`Venda: ${cotacaoVenda}`}</Text>
+                        <Text style={styles.dataHora}>{`Cotação em: ${dataHoraCotacao}`}</Text>
+                        <Text style={styles.tipo}>{`Tipo: ${tipoMoeda}`}</Text>
                     </View>
                 )}
             </View>
@@ -49,27 +41,23 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         marginBottom: 5
     },
-    descricao: {
-        flex: 2,
+    simbolo: {
+        flex: 1,
         fontWeight: 'bold',
         fontSize: 16,
         marginRight: 10
     },
-    valor: {
-        flex: 1,
+    nome: {
+        flex: 2,
+        fontSize: 16,
+        color: '#555'
+    },
+    cotacao: {
+        flex: 2,
         fontSize: 16,
         color: '#2e7d32'
     },
-    data: {
-        flex: 2,
-        color: '#555'
-    },
-    hora: {
-        flex: 1,
-        color: '#555',
-        marginLeft: 10
-    },
-    categoria: {
+    dataHora: {
         flex: 1,
         color: '#555',
         marginLeft: 10

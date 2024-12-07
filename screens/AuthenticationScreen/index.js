@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
-export default function AuthenticationScreen({ navigation }) {
+export default function AuthenticationScreen({ navigation, onLogin }) {
     const handleLogin = () => {
-        // Lógica de autenticação será implementada posteriormente
-        navigation.replace('Transacoes');
+        // Chama a função de login passada via props
+        onLogin();
     };
 
     const handleRegister = () => {
         // Lógica de registro será implementada posteriormente
-        navigation.replace('Transacoes');
+        onLogin();
     };
 
     return (
