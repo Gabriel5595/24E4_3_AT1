@@ -14,77 +14,79 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
-    return (
-        <Drawer.Navigator initialRouteName="Transacoes">
-            <Drawer.Screen
-                name="Transacoes"
-                component={TransacaoListScreen}
-                options={{
-                    title: 'Lista de Transações',
-                    drawerIcon: ({ color, size }) => (
-                        <Ionicons name="list" color={color} size={size} />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="AdicionarTransacao"
-                component={AddTransactionScreen}
-                options={{
-                    title: 'Adicionar Transação',
-                    drawerIcon: ({ color, size }) => (
-                        <Ionicons name="add-circle" color={color} size={size} />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="ExchangeRates"
-                component={ExchangeRatesScreen}
-                options={{
-                    title: 'Taxas de Câmbio',
-                    drawerIcon: ({ color, size }) => (
-                        <Ionicons name="cash" color={color} size={size} />
-                    ),
-                }}
-            />
-        </Drawer.Navigator>
-    );
+  return (
+    <Drawer.Navigator initialRouteName="Transacoes">
+      <Drawer.Screen
+        name="Transacoes"
+        component={TransacaoListScreen}
+        options={{
+          title: 'Lista de Transações',
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="list" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="AdicionarTransacao"
+        component={AddTransactionScreen}
+        options={{
+          title: 'Adicionar Transação',
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="add-circle" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="ExchangeRates"
+        component={ExchangeRatesScreen}
+        options={{
+          title: 'Taxas de Câmbio',
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="cash" color={color} size={size} />
+          ),
+        }}
+      />
+    </Drawer.Navigator>
+  );
 }
 
 export default function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleLoginSuccess = () => {
-        setIsAuthenticated(true);
-    };
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
 
-    if (isLoading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-        );
-    }
-
+  if (isLoading) {
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {!isAuthenticated ? (
-                    <Stack.Screen name="Authentication">
-                        {props => <AuthenticationScreen {...props} onLoginSuccess={handleLoginSuccess} />}
-                    </Stack.Screen>
-                ) : (
-                    <Stack.Screen name="Main" component={DrawerNavigator} />
-                )}
-            </Stack.Navigator>
-        </NavigationContainer>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
     );
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {!isAuthenticated ? (
+          <Stack.Screen name="Authentication">
+            {props => <AuthenticationScreen {...props} onLoginSuccess={handleLoginSuccess} />}
+          </Stack.Screen>
+        ) : (
+          <>
+            <Stack.Screen name="Main" component={DrawerNavigator} options={{ headerShown: false }} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

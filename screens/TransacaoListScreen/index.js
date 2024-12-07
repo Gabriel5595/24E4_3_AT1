@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text, Button, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, Button, Alert, TouchableOpacity } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { Picker } from '@react-native-picker/picker';
 import TransacaoItemList from '../../components/TransacaoItemList';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
-export default function TransacaoListScreen({ navigation }) {
+export default function TransacaoListScreen() {
     const [sortOption, setSortOption] = useState('');
     const [filterOption, setFilterOption] = useState('');
     const [dados, setDados] = useState([]);
+    const navigation = useNavigation();
 
     const ordenarDados = (dadosParaOrdenar, criterio) => {
         let dadosOrdenados = [...dadosParaOrdenar];
@@ -70,6 +73,36 @@ export default function TransacaoListScreen({ navigation }) {
         return unsubscribe;
     }, [navigation, sortOption, filterOption]);
 
+    const deleteTransaction = async (transactionId) => {
+        try {
+            Alert.alert(
+                'Confirmar Deleção',
+                'Você tem certeza que deseja deletar esta transação?',
+                [
+                    { text: 'Cancelar', style: 'cancel' },
+                    {
+                        text: 'Deletar', onPress: async () => {
+                            const transacoesJSON = await AsyncStorage.getItem('transacoes');
+                            let transacoes = transacoesJSON ? JSON.parse(transacoesJSON) : [];
+                            transacoes = transacoes.filter(item => item.id !== transactionId);
+                            await AsyncStorage.setItem('transacoes', JSON.stringify(transacoes));
+                            carregarTransacoes();
+                            Alert.alert('Sucesso', 'Transação deletada com sucesso!');
+                        }, style: 'destructive'
+                    },
+                ],
+                { cancelable: true }
+            );
+        } catch (error) {
+            console.error('Erro ao deletar transação:', error);
+            Alert.alert('Erro', 'Não foi possível deletar a transação.');
+        }
+    };
+
+    const editTransaction = (transaction) => {
+        navigation.navigate('AdicionarTransacao', { isNew: false, transactionId: transaction.id });
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.controlSection}>
@@ -113,11 +146,36 @@ export default function TransacaoListScreen({ navigation }) {
                 />
             </View>
 
-            <FlatList
+            <SwipeListView
                 data={dados}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => <TransacaoItemList transacao={item} />}
-                ListEmptyComponent={<Text style={styles.emptyText}>Nenhuma transação encontrada.</Text>}
+                renderItem={(data) => (
+                    <TransacaoItemList transacao={data.item} />
+                )}
+                renderHiddenItem={(data, rowMap) => (
+                    <View style={styles.rowBack}>
+                        <TouchableOpacity
+                            style={[styles.backLeftBtn, styles.backBtn]}
+                            onPress={() => editTransaction(data.item)}
+                        >
+                            <Ionicons name="create-outline" size={25} color="#fff" />
+                            <Text style={styles.backTextWhite}>Editar</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[styles.backRightBtn, styles.backBtn]}
+                            onPress={() => deleteTransaction(data.item.id)}
+                        >
+                            <Ionicons name="trash-outline" size={25} color="#fff" />
+                            <Text style={styles.backTextWhite}>Deletar</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+                leftOpenValue={75}
+                rightOpenValue={-75}
+                disableRightSwipe={false}
+                stopLeftSwipe={150}
+                stopRightSwipe={-150}
             />
         </View>
     );
@@ -142,6 +200,35 @@ const styles = StyleSheet.create({
     },
     resetButton: {
         marginBottom: 10
+    },
+    rowBack: {
+        alignItems: 'center',
+        backgroundColor: '#DDD',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    backBtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 75,
+        height: '100%',
+    },
+    backLeftBtn: {
+        backgroundColor: '#1f65ff', // Azul para editar
+        position: 'absolute',
+        left: 0,
+    },
+    backRightBtn: {
+        backgroundColor: '#FF3B30', // Vermelho para deletar
+        position: 'absolute',
+        right: 0,
+    },
+    backTextWhite: {
+        color: '#FFF',
+        fontSize: 12,
+        marginTop: 5
     },
     emptyText: {
         textAlign: 'center',

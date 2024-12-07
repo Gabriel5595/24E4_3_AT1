@@ -1,82 +1,59 @@
 import React from 'react';
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function TransacaoItemList({ transacao }) {
-    const {
-        descricao,
-        valor,
-        data,
-        hora,
-        categoria,
-        tipo,
-        moeda
-    } = transacao;
-
-    const window = useWindowDimensions();
-    const isLandscape = window.width > window.height;
-
     return (
-        <View style={styles.container}>
-            <View style={styles.row}>
-                <Text style={styles.descricao}>{descricao}</Text>
-                <Text style={styles.valor}>{`${valor} ${moeda}`}</Text>
+        <View style={styles.rowFront}>
+            <View style={styles.itemContainer}>
+                <Text style={styles.descricao}>{transacao.descricao}</Text>
+                <Text style={styles.valor}>{transacao.valor.toFixed(2)}</Text>
             </View>
-            <View style={styles.row}>
-                <Text style={styles.data}>{`Data: ${data}`}</Text>
-                {isLandscape && (
-                    <View>
-                        <Text style={styles.hora}>{`Hora: ${hora}`}</Text>
-                        <Text style={styles.categoria}>{`Categoria: ${categoria}`}</Text>
-                        <Text style={styles.tipo}>{`Tipo: ${tipo}`}</Text>
-                    </View>
-                )}
+            <View style={styles.detailsContainer}>
+                <Text style={styles.categoria}>{transacao.categoria}</Text>
+                <Text style={styles.tipo}>{transacao.tipo}</Text>
+                <Text style={styles.moeda}>{transacao.moeda}</Text>
+                <Text style={styles.dataHora}>{`${transacao.data} ${transacao.hora}`}</Text>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        borderWidth: 1,
-        borderColor: '#ccc',
+    rowFront: {
+        backgroundColor: '#FFF',
+        borderBottomColor: '#CCC',
+        borderBottomWidth: 1,
         padding: 15,
-        marginVertical: 5,
-        borderRadius: 5,
-        backgroundColor: '#f9f9f9'
     },
-    row: {
+    itemContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginBottom: 5
+        justifyContent: 'space-between',
     },
     descricao: {
-        flex: 2,
-        fontWeight: 'bold',
         fontSize: 16,
-        marginRight: 10
+        fontWeight: 'bold',
     },
     valor: {
-        flex: 1,
         fontSize: 16,
-        color: '#2e7d32'
+        color: '#2e7d32',
     },
-    data: {
-        flex: 2,
-        color: '#555'
-    },
-    hora: {
-        flex: 1,
-        color: '#555',
-        marginLeft: 10
+    detailsContainer: {
+        marginTop: 5,
     },
     categoria: {
-        flex: 1,
+        fontSize: 14,
         color: '#555',
-        marginLeft: 10
     },
     tipo: {
-        flex: 1,
+        fontSize: 14,
         color: '#555',
-        marginLeft: 10
-    }
+    },
+    moeda: {
+        fontSize: 14,
+        color: '#555',
+    },
+    dataHora: {
+        fontSize: 12,
+        color: '#777',
+    },
 });
