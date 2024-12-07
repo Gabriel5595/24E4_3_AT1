@@ -1,10 +1,8 @@
-// screens/TransacaoListScreen.js
-
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Button } from 'react-native';
 import TransacaoItemList from '../../components/TransacaoItemList';
 
-export default function TransacaoListScreen({ transacoes }) {
+export default function TransacaoListScreen({ navigation, transacoes }) {
     const dados = transacoes || [
         {
             id: '1',
@@ -28,8 +26,13 @@ export default function TransacaoListScreen({ transacoes }) {
         }
     ];
 
+    const handleAddTransaction = () => {
+        navigation.navigate('AdicionarTransacao');
+    };
+
     return (
         <View style={styles.container}>
+            <Button title="Adicionar Transação" onPress={handleAddTransaction} />
             <FlatList
                 data={dados}
                 keyExtractor={item => item.id}
