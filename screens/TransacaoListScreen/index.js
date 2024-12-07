@@ -1,6 +1,8 @@
+// screens/TransacaoListScreen.js
+
 import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
-import TransacaoItemList from '../../components/transacaoItem';
+import TransacaoItemList from '../../components/TransacaoItemList';
 
 export default function TransacaoListScreen({ transacoes }) {
     const dados = transacoes || [
