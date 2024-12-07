@@ -1,23 +1,12 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import UserForm from '../../components/UserForm';
 
-export default function AuthenticationScreen({ navigation, onLogin }) {
-    const handleLogin = () => {
-        // Chama a função de login passada via props
-        onLogin();
-    };
-
-    const handleRegister = () => {
-        // Lógica de registro será implementada posteriormente
-        onLogin();
-    };
-
+export default function AuthenticationScreen({ navigation, onLoginSuccess }) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Bem-vindo ao Gerenciador Financeiro</Text>
-            <Button title="Login" onPress={handleLogin} />
-            <View style={styles.separator} />
-            <Button title="Registrar" onPress={handleRegister} />
+            <UserForm onLoginSuccess={onLoginSuccess} />
         </View>
     );
 }
@@ -26,14 +15,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 20
+        padding: 20,
+        backgroundColor: '#fff',
     },
     title: {
         fontSize: 24,
         marginBottom: 40,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
-    separator: {
-        height: 20
-    }
 });
