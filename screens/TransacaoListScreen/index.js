@@ -3,7 +3,6 @@ import { View, FlatList, StyleSheet } from 'react-native';
 import TransacaoItemList from '../../components/transacaoItem';
 
 export default function TransacaoListScreen({ transacoes }) {
-    // Caso não receba a lista via props, definimos um array de exemplo
     const dados = transacoes || [
         {
             id: '1',
