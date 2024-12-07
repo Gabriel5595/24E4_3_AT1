@@ -1,9 +1,10 @@
+// screens/TransacaoListScreen.js
+
 import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
-import TransacaoItemList from '../../components/transacaoItem';
+import TransacaoItemList from '../../components/TransacaoItemList';
 
 export default function TransacaoListScreen({ transacoes }) {
-    // Caso não receba a lista via props, definimos um array de exemplo
     const dados = transacoes || [
         {
             id: '1',
